@@ -12,6 +12,17 @@ interface Balance {
 class TransactionsRepository extends Repository<Transaction> {
   public async getBalance(): Promise<Balance> {
     // TODO
+    const transactions = await this.find();
+    const balance = transactions.reduce(
+      (acumulator, transaction) => {
+        // eslint-disable-next-line no-param-reassign
+        acumulator[transaction.type] += transaction.value;
+        return acumulator;
+      },
+      { income: 0, outcome: 0, total: 0 },
+    );
+    balance.total = balance.income - balance.outcome;
+    return balance;
   }
 }
 

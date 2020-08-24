@@ -3,8 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
-import { resolveConfig } from 'prettier';
-// import DeleteTransactionService from '../services/DeleteTransactionService';
+import DeleteTransactionService from '../services/DeleteTransactionService';
 // import ImportTransactionsService from '../services/ImportTransactionsService';
 
 const transactionsRouter = Router();
@@ -43,17 +42,15 @@ transactionsRouter.delete('/:id', async (request, response) => {
   // TODO
   const { id } = request.params;
 
-  const transactionRepository = getCustomRepository(TransactionsRepository);
+  const deleteTransaction = new DeleteTransactionService();
 
-  const transaction = await transactionRepository.findOne(id);
-
-  await transactionRepository.delete(id);
+  const transaction = await deleteTransaction.execute({ id });
 
   return response.json(transaction);
 });
 
-// transactionsRouter.post('/import', async (request, response) => {
-//   // TODO
-// });
+transactionsRouter.post('/import', async (request, response) => {
+  // TODO
+});
 
 export default transactionsRouter;
